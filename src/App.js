@@ -1,14 +1,19 @@
 import './App.css';
+import Routes from './routes';
 import { Provider } from 'react-redux';
 import { store } from './store';
-import Home from './pages/Home';
+import { BrowserRouter as Router, Switch } from 'react-router-dom';
 
 const App = () => {
     return (
         <Provider store={store}>
-            <div className="page-wrapper">
-                <Home />
-            </div>
+            <Router>
+                <div className="page-wrapper">
+                    <Switch>
+                        <Routes />
+                    </Switch>
+                </div>
+            </Router>
         </Provider>
     );
 };

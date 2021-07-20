@@ -1,0 +1,9 @@
+.page {
+    width: 100%;
+    display: flex;
+    flex: 1;
+    max-width: 1400px;
+    background: rgba(126, 30, 235, 0.1);
+    padding: 16px;
+    justify-content: center;
+}
