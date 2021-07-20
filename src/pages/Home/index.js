@@ -1,4 +1,4 @@
-import { Button, Paper, TextField } from '@material-ui/core';
+import { Button, Paper, TextField, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useActions } from '../../hooks/useActions';
@@ -95,9 +95,13 @@ const Home = ({ fetchEntity, reducer, filterList }) => {
     return (
         <div>
             {loading || keys.length === 0 ? (
-                <div>Loading...</div>
+                <div>
+                    <Typography variant="body2">Loading...</Typography>
+                </div>
             ) : error ? (
-                <div>{error}</div>
+                <div>
+                    <Typography variant="body2">{error}</Typography>
+                </div>
             ) : (
                 <>
                     <Paper>
@@ -113,7 +117,7 @@ const Home = ({ fetchEntity, reducer, filterList }) => {
                             variant="outlined"
                             onClick={e => handleFilterClick(e)}
                         >
-                            Filter
+                            <Typography variant="body2">Filter</Typography>
                         </Button>
                     </Paper>
                     <Table

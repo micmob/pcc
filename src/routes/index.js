@@ -2,6 +2,7 @@ import { Route } from 'react-router-dom';
 import './index.css';
 import Home from '../pages/Home';
 import { useActions } from '../hooks/useActions';
+import Header from '../components/Header';
 
 const Routes = () => {
     const { fetchCouncillors, fetchCouncils, fetchAffairs } = useActions();
@@ -14,6 +15,7 @@ const Routes = () => {
 
     return (
         <>
+            <Header />
             <Route path="/" exact>
                 <Page>
                     <Home
