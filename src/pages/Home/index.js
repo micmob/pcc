@@ -2,18 +2,15 @@ import { Button, Paper, TextField } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useActions } from '../../hooks/useActions';
-import { useStyles } from './styles';
 import Table from '../../components/Table';
 
-const Home = () => {
-    const { fetchCouncillors } = useActions();
-
+const Home = ({ fetchEntity, reducer, filterList }) => {
     useEffect(() => {
-        fetchCouncillors(1);
-    }, [fetchCouncillors]);
+        fetchEntity(1);
+    }, [fetchEntity]);
 
-    const councillors = useSelector(state => state.councillors);
-    const [councillorsData, setCouncillorsData] = useState(null);
+    const entity = useSelector(reducer);
+    const [entityData, setEntityData] = useState(null);
     const [filteredData, setFilteredData] = useState();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -21,13 +18,13 @@ const Home = () => {
     const [keys, setKeys] = useState([]);
 
     useEffect(() => {
-        if (!councillors.loading && !councillors.error) {
-            setCouncillorsData(councillors.data);
-            setFilteredData(councillors.data);
+        if (!entity.loading && !entity.error) {
+            setEntityData(entity.data);
+            setFilteredData(entity.data);
             setLoading(false);
 
             const updatedKeys = [];
-            councillors.data.map(data =>
+            entity.data.map(data =>
                 Object.keys(data).map(
                     key =>
                         !updatedKeys.includes(key.toString()) &&
@@ -37,14 +34,14 @@ const Home = () => {
             );
             setKeys(updatedKeys);
         } else {
-            if (councillors.loading) {
-                setLoading(councillors.loading);
+            if (entity.loading) {
+                setLoading(entity.loading);
             }
-            if (councillors.error) {
-                setError(councillors.error);
+            if (entity.error) {
+                setError(entity.error);
             }
         }
-    }, [councillors]);
+    }, [entity]);
 
     const [orderBy, setOrderBy] = useState();
     const [order, setOrder] = useState('asc');
@@ -66,11 +63,10 @@ const Home = () => {
                 : a[property] > b[property]
                 ? -1
                 : 0;
-        setCouncillorsData([...councillorsData].sort(sortData));
+        setEntityData([...entityData].sort(sortData));
         setFilteredData([...filteredData].sort(sortData));
     };
 
-    const filterList = ['id', 'firstName', 'lastName'];
     const [filters, setFilters] = useState({});
 
     const handleFilterChange = (e, property) => {
@@ -81,7 +77,7 @@ const Home = () => {
 
     const handleFilterClick = e => {
         e.preventDefault();
-        const updatedCouncillors = councillorsData.filter(data => {
+        const updatedEntity = entityData.filter(data => {
             return Object.keys(filters).reduce(
                 (acc, key) =>
                     acc &&
@@ -93,7 +89,7 @@ const Home = () => {
                 true
             );
         });
-        setFilteredData(updatedCouncillors);
+        setFilteredData(updatedEntity);
     };
 
     return (
@@ -126,6 +122,7 @@ const Home = () => {
                         order={order}
                         sort={sort}
                         filteredData={filteredData}
+                        filterList={filterList}
                     />
                 </>
             )}

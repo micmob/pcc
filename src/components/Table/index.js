@@ -9,7 +9,7 @@ import {
     TableSortLabel,
 } from '@material-ui/core';
 
-const Table = ({ keys, orderBy, order, sort, filteredData }) => {
+const Table = ({ keys, orderBy, order, sort, filteredData, filterList }) => {
     return (
         <TableContainer component={Paper}>
             <MuiTable>
@@ -25,9 +25,7 @@ const Table = ({ keys, orderBy, order, sort, filteredData }) => {
                                             : false
                                     }
                                 >
-                                    {['id', 'firstName', 'lastName'].includes(
-                                        key.toString()
-                                    ) ? (
+                                    {filterList.includes(key.toString()) ? (
                                         <TableSortLabel
                                             active={orderBy === key.toString()}
                                             direction={
