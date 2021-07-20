@@ -1,18 +1,5 @@
 import { ActionTypes } from './action-types';
 
-const fetchData = async i => {
-    let response;
-    try {
-    } catch (err) {}
-
-    if (response.status === 200) {
-        const json = await response.json();
-        return json;
-    } else {
-        // throw new Error(response.statusText);
-    }
-};
-
 export const fetchCouncillors = pageNumber => {
     return async dispatch => {
         dispatch({
