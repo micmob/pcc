@@ -1,23 +1,9 @@
-import {
-    Button,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Paper,
-    Select,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    TableSortLabel,
-    TextField,
-} from '@material-ui/core';
+import { Button, Paper, TextField } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useActions } from '../../hooks/useActions';
 import { useStyles } from './styles';
+import Table from '../../components/Table';
 
 const Home = () => {
     const styles = useStyles();
@@ -150,70 +136,13 @@ const Home = () => {
                             Filter
                         </Button>
                     </Paper>
-                    <TableContainer component={Paper}>
-                        <Table className={styles.table}>
-                            <TableHead>
-                                <TableRow key="head">
-                                    {keys.map(key => {
-                                        return (
-                                            <TableCell
-                                                align="left"
-                                                sortDirection={
-                                                    orderBy === key.toString()
-                                                        ? order
-                                                        : false
-                                                }
-                                            >
-                                                {[
-                                                    'id',
-                                                    'firstName',
-                                                    'lastName',
-                                                ].includes(key.toString()) ? (
-                                                    <TableSortLabel
-                                                        active={
-                                                            orderBy ===
-                                                            key.toString()
-                                                        }
-                                                        direction={
-                                                            orderBy ===
-                                                            key.toString()
-                                                                ? order
-                                                                : 'asc'
-                                                        }
-                                                        onClick={sort(
-                                                            key.toString()
-                                                        )}
-                                                    >
-                                                        {key}
-                                                    </TableSortLabel>
-                                                ) : (
-                                                    key
-                                                )}
-                                            </TableCell>
-                                        );
-                                    })}
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {filteredData.map(data => (
-                                    <TableRow key={data.id}>
-                                        {keys.map(
-                                            key =>
-                                                keys.includes(key) && (
-                                                    <TableCell align="left">
-                                                        {data[key]
-                                                            ? data[
-                                                                  key
-                                                              ].toString()
-                                                            : data[key]}
-                                                    </TableCell>
-                                                )
-                                        )}
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                    <Table
+                        keys={keys}
+                        orderBy={orderBy}
+                        order={order}
+                        sort={sort}
+                        filteredData={filteredData}
+                    />
                 </>
             )}
         </div>
