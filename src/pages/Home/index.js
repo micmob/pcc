@@ -12,6 +12,7 @@ import {
     TableHead,
     TableRow,
     TableSortLabel,
+    TextField,
 } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -29,6 +30,7 @@ const Home = () => {
 
     const councillors = useSelector(state => state.councillors);
     const [councillorsData, setCouncillorsData] = useState(null);
+    const [filteredData, setFilteredData] = useState();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -37,6 +39,7 @@ const Home = () => {
     useEffect(() => {
         if (!councillors.loading && !councillors.error) {
             setCouncillorsData(councillors.data);
+            setFilteredData(councillors.data);
             setLoading(false);
 
             const updatedKeys = [];
@@ -66,22 +69,61 @@ const Home = () => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
-        console.log(councillorsData);
-        setCouncillorsData(
-            [...councillorsData].sort((a, b) =>
-                isAsc
-                    ? a[property] < b[property]
-                        ? -1
-                        : a[property] > b[property]
-                        ? 1
-                        : 0
-                    : a[property] < b[property]
-                    ? 1
-                    : a[property] > b[property]
+
+        const sortData = (a, b) =>
+            isAsc
+                ? a[property] < b[property]
                     ? -1
+                    : a[property] > b[property]
+                    ? 1
                     : 0
-            )
-        );
+                : a[property] < b[property]
+                ? 1
+                : a[property] > b[property]
+                ? -1
+                : 0;
+        setCouncillorsData([...councillorsData].sort(sortData));
+        setFilteredData([...filteredData].sort(sortData));
+    };
+
+    const filterList = ['id', 'firstName', 'lastName'];
+    const [filters, setFilters] = useState({});
+
+    const handleFilterChange = (e, property) => {
+        const updatedFilter = Object.assign({}, filters);
+        updatedFilter[property] = e.target.value;
+        setFilters(updatedFilter);
+    };
+
+    const handleFilterClick = e => {
+        e.preventDefault();
+        const updatedCouncillors = councillorsData.filter(data => {
+            console.log(
+                Object.keys(filters).reduce(
+                    (acc, key) =>
+                        acc &&
+                        (filters[key] === '' ||
+                            data[key]
+                                .toString()
+                                .toLowerCase()
+                                .includes(
+                                    filters[key].toString().toLowerCase()
+                                )),
+                    true
+                )
+            );
+            return Object.keys(filters).reduce(
+                (acc, key) =>
+                    acc &&
+                    (filters[key] === '' ||
+                        data[key]
+                            .toString()
+                            .toLowerCase()
+                            .includes(filters[key].toString().toLowerCase())),
+                true
+            );
+        });
+        setFilteredData(updatedCouncillors);
     };
 
     return (
@@ -91,68 +133,88 @@ const Home = () => {
             ) : error ? (
                 <div>{error}</div>
             ) : (
-                <TableContainer component={Paper}>
-                    <Table className={styles.table}>
-                        <TableHead>
-                            <TableRow key={councillorsData[0].id + 'head'}>
-                                {keys.map(key => {
-                                    return (
-                                        <TableCell
-                                            align="left"
-                                            sortDirection={
-                                                orderBy === key.toString()
-                                                    ? order
-                                                    : false
-                                            }
-                                        >
-                                            {[
-                                                'id',
-                                                'firstName',
-                                                'lastName',
-                                            ].includes(key.toString()) ? (
-                                                <TableSortLabel
-                                                    active={
-                                                        orderBy ===
-                                                        key.toString()
-                                                    }
-                                                    direction={
-                                                        orderBy ===
-                                                        key.toString()
-                                                            ? order
-                                                            : 'asc'
-                                                    }
-                                                    onClick={sort(
-                                                        key.toString()
-                                                    )}
-                                                >
-                                                    {key}
-                                                </TableSortLabel>
-                                            ) : (
-                                                key
-                                            )}
-                                        </TableCell>
-                                    );
-                                })}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {councillorsData.map(data => (
-                                <TableRow key={data.id}>
-                                    {keys.map(
-                                        key =>
-                                            keys.includes(key) && (
-                                                <TableCell align="left">
-                                                    {data[key]
-                                                        ? data[key].toString()
-                                                        : data[key]}
-                                                </TableCell>
-                                            )
-                                    )}
+                <>
+                    <Paper>
+                        {filterList.map(f => (
+                            <TextField
+                                label={f}
+                                variant="outlined"
+                                value={filters[f]}
+                                onChange={e => handleFilterChange(e, f)}
+                            />
+                        ))}
+                        <Button
+                            variant="outlined"
+                            onClick={e => handleFilterClick(e)}
+                        >
+                            Filter
+                        </Button>
+                    </Paper>
+                    <TableContainer component={Paper}>
+                        <Table className={styles.table}>
+                            <TableHead>
+                                <TableRow key="head">
+                                    {keys.map(key => {
+                                        return (
+                                            <TableCell
+                                                align="left"
+                                                sortDirection={
+                                                    orderBy === key.toString()
+                                                        ? order
+                                                        : false
+                                                }
+                                            >
+                                                {[
+                                                    'id',
+                                                    'firstName',
+                                                    'lastName',
+                                                ].includes(key.toString()) ? (
+                                                    <TableSortLabel
+                                                        active={
+                                                            orderBy ===
+                                                            key.toString()
+                                                        }
+                                                        direction={
+                                                            orderBy ===
+                                                            key.toString()
+                                                                ? order
+                                                                : 'asc'
+                                                        }
+                                                        onClick={sort(
+                                                            key.toString()
+                                                        )}
+                                                    >
+                                                        {key}
+                                                    </TableSortLabel>
+                                                ) : (
+                                                    key
+                                                )}
+                                            </TableCell>
+                                        );
+                                    })}
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                            </TableHead>
+                            <TableBody>
+                                {filteredData.map(data => (
+                                    <TableRow key={data.id}>
+                                        {keys.map(
+                                            key =>
+                                                keys.includes(key) && (
+                                                    <TableCell align="left">
+                                                        {data[key]
+                                                            ? data[
+                                                                  key
+                                                              ].toString()
+                                                            : data[key]}
+                                                    </TableCell>
+                                                )
+                                        )}
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </>
             )}
         </div>
     );
