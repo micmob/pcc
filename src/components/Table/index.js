@@ -9,6 +9,15 @@ import {
     TableSortLabel,
 } from '@material-ui/core';
 
+/**
+ *
+ * @param keys all existent keys for filteredData
+ * @param orderBy property of an entity
+ * @param order 'asc' | 'desc'
+ * @param sort function
+ * @param filteredData
+ * @param filterList list of properties used to filter
+ */
 const Table = ({ keys, orderBy, order, sort, filteredData, filterList }) => {
     return (
         <TableContainer component={Paper}>

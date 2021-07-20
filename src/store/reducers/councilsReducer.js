@@ -23,7 +23,7 @@ const reducer = produce((state = initialState, action) => {
             return state;
         case ActionTypes.FETCH_COUNCILS_COMPLETE:
             state.loading = false;
-            state.data = action.payload;
+            state.data.push(...action.payload);
 
             return state;
         default:

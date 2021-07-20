@@ -7,10 +7,14 @@ import { useStyles } from './styles';
 
 const Home = ({ fetchEntity, reducer, filterList }) => {
     const styles = useStyles();
+
+    // ***** FETCHING *****
+
     useEffect(() => {
         fetchEntity(1);
     }, [fetchEntity]);
 
+    // ***** SET DATA & LOADING & ERRORS *****
     const entity = useSelector(reducer);
     const [entityData, setEntityData] = useState(null);
     const [filteredData, setFilteredData] = useState();
@@ -25,6 +29,7 @@ const Home = ({ fetchEntity, reducer, filterList }) => {
             setFilteredData(entity.data);
             setLoading(false);
 
+            // getting a list of all existent keys
             const updatedKeys = [];
             entity.data.map(data =>
                 Object.keys(data).map(
@@ -46,7 +51,7 @@ const Home = ({ fetchEntity, reducer, filterList }) => {
     }, [entity]);
 
     const [orderBy, setOrderBy] = useState();
-    const [order, setOrder] = useState('asc');
+    const [order, setOrder] = useState('asc'); // 'desc' or 'asc'
 
     const sort = property => event => {
         const isAsc = orderBy === property && order === 'asc';
@@ -65,6 +70,7 @@ const Home = ({ fetchEntity, reducer, filterList }) => {
                 : a[property] > b[property]
                 ? -1
                 : 0;
+
         setEntityData([...entityData].sort(sortData));
         setFilteredData([...filteredData].sort(sortData));
     };
@@ -79,18 +85,18 @@ const Home = ({ fetchEntity, reducer, filterList }) => {
 
     const handleFilterClick = e => {
         e.preventDefault();
-        const updatedEntity = entityData.filter(data => {
-            return Object.keys(filters).reduce(
+        const updatedEntity = entityData.filter(data =>
+            Object.keys(filters).reduce(
                 (acc, key) =>
                     acc &&
-                    (filters[key] === '' ||
+                    (filters[key] === '' || // current filter isn't applied
                         data[key]
                             .toString()
                             .toLowerCase()
                             .includes(filters[key].toString().toLowerCase())),
                 true
-            );
-        });
+            )
+        );
         setFilteredData(updatedEntity);
     };
 
@@ -106,6 +112,7 @@ const Home = ({ fetchEntity, reducer, filterList }) => {
                 </div>
             ) : (
                 <>
+                    {/* ***** FILTERS SECTION ***** */}
                     <Paper className={styles.filters}>
                         {filterList.map(f => (
                             <TextField
@@ -126,6 +133,7 @@ const Home = ({ fetchEntity, reducer, filterList }) => {
                             </Button>
                         </div>
                     </Paper>
+                    {/* ***** TABLE ***** */}
                     <Table
                         keys={keys}
                         orderBy={orderBy}

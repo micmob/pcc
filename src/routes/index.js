@@ -7,11 +7,7 @@ import Header from '../components/Header';
 const Routes = () => {
     const { fetchCouncillors, fetchCouncils, fetchAffairs } = useActions();
 
-    const Page = ({ children }) => (
-        <>
-            <div className="page">{children}</div>
-        </>
-    );
+    const Page = ({ children }) => <div className="page">{children}</div>;
 
     return (
         <>

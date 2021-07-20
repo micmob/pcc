@@ -8,6 +8,7 @@ export const fetchCouncillors = pageNumber => {
 
         try {
             // ***** fetching data from each page *****
+            // had to use a proxy server because of the cors error
             const response = await fetch(
                 `https://guarded-beyond-25903.herokuapp.com/http://ws-old.parlament.ch/councillors?format=json&lang=en&pageNumber=${pageNumber}`
             );
