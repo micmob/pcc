@@ -4,7 +4,7 @@ import { ActionTypes } from '../actions/action-types';
 const initialState = {
     loading: true,
     error: null,
-    data: null,
+    data: [],
 };
 
 const reducer = produce((state = initialState, action) => {
@@ -12,13 +12,13 @@ const reducer = produce((state = initialState, action) => {
         case ActionTypes.FETCH_COUNCILS:
             state.loading = true;
             state.error = null;
-            state.data = null;
+            state.data = [];
 
             return state;
         case ActionTypes.FETCH_COUNCILS_ERROR:
             state.loading = false;
             state.error = action.payload;
-            state.data = null;
+            state.data = [];
 
             return state;
         case ActionTypes.FETCH_COUNCILS_COMPLETE:

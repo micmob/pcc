@@ -1,10 +1,10 @@
-import produce from 'immer';
+import produce, { current } from 'immer';
 import { ActionTypes } from '../actions/action-types';
 
 const initialState = {
     loading: true,
     error: null,
-    data: null,
+    data: [],
 };
 
 const reducer = produce((state = initialState, action) => {
@@ -12,18 +12,18 @@ const reducer = produce((state = initialState, action) => {
         case ActionTypes.FETCH_COUNCILLORS:
             state.loading = true;
             state.error = null;
-            state.data = null;
+            state.data = [];
 
             return state;
         case ActionTypes.FETCH_COUNCILLORS_ERROR:
             state.loading = false;
             state.error = action.payload;
-            state.data = null;
+            state.data = [];
 
             return state;
         case ActionTypes.FETCH_COUNCILLORS_COMPLETE:
             state.loading = false;
-            state.data = action.payload;
+            state.data.push(...action.payload);
 
             return state;
         default:
