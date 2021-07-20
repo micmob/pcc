@@ -59,13 +59,13 @@ const Home = () => {
         }
     }, [councillors]);
 
-    const [filter, setFilter] = useState();
+    const [orderBy, setOrderBy] = useState();
     const [order, setOrder] = useState('asc');
 
     const sort = property => event => {
-        const isAsc = filter === property && order === 'asc';
+        const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
-        setFilter(property);
+        setOrderBy(property);
         console.log(councillorsData);
         setCouncillorsData(
             [...councillorsData].sort((a, b) =>
@@ -100,7 +100,7 @@ const Home = () => {
                                         <TableCell
                                             align="left"
                                             sortDirection={
-                                                filter === key.toString()
+                                                orderBy === key.toString()
                                                     ? order
                                                     : false
                                             }
@@ -112,11 +112,11 @@ const Home = () => {
                                             ].includes(key.toString()) ? (
                                                 <TableSortLabel
                                                     active={
-                                                        filter ===
+                                                        orderBy ===
                                                         key.toString()
                                                     }
                                                     direction={
-                                                        filter ===
+                                                        orderBy ===
                                                         key.toString()
                                                             ? order
                                                             : 'asc'
