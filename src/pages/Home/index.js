@@ -3,8 +3,10 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useActions } from '../../hooks/useActions';
 import Table from '../../components/Table';
+import { useStyles } from './styles';
 
 const Home = ({ fetchEntity, reducer, filterList }) => {
+    const styles = useStyles();
     useEffect(() => {
         fetchEntity(1);
     }, [fetchEntity]);
@@ -104,21 +106,25 @@ const Home = ({ fetchEntity, reducer, filterList }) => {
                 </div>
             ) : (
                 <>
-                    <Paper>
+                    <Paper className={styles.filters}>
                         {filterList.map(f => (
                             <TextField
                                 label={f}
                                 variant="outlined"
                                 value={filters[f]}
                                 onChange={e => handleFilterChange(e, f)}
+                                className={styles.filtersItem}
                             />
                         ))}
-                        <Button
-                            variant="outlined"
-                            onClick={e => handleFilterClick(e)}
-                        >
-                            <Typography variant="body2">Filter</Typography>
-                        </Button>
+                        <div className={styles.filtersButtonContainer}>
+                            <Button
+                                variant="outlined"
+                                onClick={e => handleFilterClick(e)}
+                                className={styles.filtersButton}
+                            >
+                                <Typography variant="body2">Filter</Typography>
+                            </Button>
+                        </div>
                     </Paper>
                     <Table
                         keys={keys}
