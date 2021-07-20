@@ -6,8 +6,6 @@ import { useStyles } from './styles';
 import Table from '../../components/Table';
 
 const Home = () => {
-    const styles = useStyles();
-
     const { fetchCouncillors } = useActions();
 
     useEffect(() => {
@@ -84,20 +82,6 @@ const Home = () => {
     const handleFilterClick = e => {
         e.preventDefault();
         const updatedCouncillors = councillorsData.filter(data => {
-            console.log(
-                Object.keys(filters).reduce(
-                    (acc, key) =>
-                        acc &&
-                        (filters[key] === '' ||
-                            data[key]
-                                .toString()
-                                .toLowerCase()
-                                .includes(
-                                    filters[key].toString().toLowerCase()
-                                )),
-                    true
-                )
-            );
             return Object.keys(filters).reduce(
                 (acc, key) =>
                     acc &&
